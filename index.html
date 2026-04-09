@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- 💖 ฟ้อนต์หวานๆ -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+  <title>For You ❤️</title>
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+    }
+
+    /* 💌 ข้อความ */
+    #loveText {
+      position: absolute;
+      top: 20%;
+      width: 100%;
+      text-align: center;
+      color: #ffccd5;
+      font-size: 40px;
+      font-family: 'Pacifico', cursive;
+
+      /* ✨ เงาเรืองแสง */
+      text-shadow: 
+        0 0 10px #ff4d6d,
+        0 0 20px #ff4d6d,
+        0 0 40px #ff1a4d;
+
+      transition: opacity 1s;
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 💌 ข้อความ -->
+  <div id="loveText">This is for you ❤️</div>
+
+  <!-- 🎵 เพลง -->
+  <audio autoplay loop>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- 🎬 Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
