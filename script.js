@@ -51,17 +51,17 @@ glow.scale.set(3.2, 3.2, 3.2);
 scene.add(glow);
 // ✨ PARTICLES (ฟุ้งรอบหัวใจ)
 const particles = new THREE.BufferGeometry();
-const count = 800;
+const count = 2000;
 
 const positions = new Float32Array(count * 3);
-const radius = 8;
+const radius = 5;
 
 for (let i = 0; i < count; i++) {
   const angle = Math.random() * Math.PI * 2;
   const r = radius + Math.random() * 2;
 
   positions[i * 3] = Math.cos(angle) * r;
-  positions[i * 3 + 1] = (Math.random() - 0.5) * 5;
+  positions[i * 3 + 1] = (Math.random() - 0.5) * 10; // 🔥 สูงขึ้น
   positions[i * 3 + 2] = Math.sin(angle) * r;
 }
 
@@ -72,9 +72,11 @@ particles.setAttribute(
 
 const pMaterial = new THREE.PointsMaterial({
   color: 0xff99cc,
-  size: 0.05,
+  size: 0.12,
   transparent: true,
-  opacity: 0.7
+  opacity: 1,
+  depthWrite: false,   // 🔥 สำคัญมาก
+  blending: THREE.AdditiveBlending // 🔥 ทำให้มันเรือง
 });
 
 const particleSystem = new THREE.Points(particles, pMaterial);
@@ -96,7 +98,9 @@ function animate() {
   heart.rotation.x += 0.005;
   glow.rotation.y += 0.01;
   glow.rotation.x += 0.005;
-  particleSystem.rotation.y += 0.002;
+  particleSystem.rotation.y += 0.004;
+  particleSystem.rotation.x += 0.002;
+  particleSystem.position.z = 2; // 🔥 ดันออกมาข้างหน้า
 
   const beat = 1 + Math.sin(Date.now() * 0.005) * 0.1;
   heart.scale.set(3 * beat, 3 * beat, 3 * beat);
