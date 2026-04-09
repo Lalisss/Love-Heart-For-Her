@@ -93,10 +93,34 @@ function animate() {
 animate(); // 👈 เรียกใช้งานก่อน
 
 const messages = [
-  "This is for you babe ❤️",
+  "This is for you babe ",
   "You make me so happy",
   "I love you more everyday",
   "Stay with me forever",
+  "You make my world brighter",
+  "I love you more than words can say",
+  "You are my favorite person",
+  "Being with you feels like home",
+  "I’m so lucky to have you",
+  "You are my happiness",
+  "Every moment with you is special",
+  "I fall in love with you every day",
+  "You complete me",
+  "I’ll always choose you",
+  "You are my safe place",
+  "My heart belongs to you",
+  "You make everything better",
+  "I can’t imagine life without you",
+  "You are my dream come true",
+  "Forever isn’t enough with you",
+  "You are my sunshine",
+  "With you, I feel whole",
+  "You are the best thing in my life",
+  "I just want to be with you always",
+  "You mean everything to me",
+  "You are my one and only",
+  "I love you endlessly",
+  "You are my forever",
   "You are my everything"
 ];
 
