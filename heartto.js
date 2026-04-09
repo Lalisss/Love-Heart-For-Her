@@ -13,14 +13,18 @@ document.body.appendChild(renderer.domElement);
 const heartShape = new THREE.Shape();
 
 heartShape.moveTo(0, 0);
-heartShape.bezierCurveTo(0, 0, -1, -1, -2, 0);
-heartShape.bezierCurveTo(-3, 2, 0, 3, 0, 4);
-heartShape.bezierCurveTo(0, 3, 3, 2, 2, 0);
-heartShape.bezierCurveTo(1, -1, 0, 0, 0, 0);
+heartShape.bezierCurveTo(0, 0, 0, 3, 2, 3);
+heartShape.bezierCurveTo(4, 3, 4, 0, 4, 0);
+heartShape.bezierCurveTo(4, -2, 2, -3, 0, -1);
+heartShape.bezierCurveTo(-2, -3, -4, -2, -4, 0);
+heartShape.bezierCurveTo(-4, 0, -4, 3, -2, 3);
+heartShape.bezierCurveTo(0, 3, 0, 0, 0, 0);
 
 const geometry = new THREE.ExtrudeGeometry(heartShape, {
-  depth: 0.5,
-  bevelEnabled: true
+  depth: 1,
+  bevelEnabled: true,
+  bevelSize: 0.3,
+  bevelThickness: 0.3
 });
 
 geometry.center();
@@ -28,11 +32,14 @@ geometry.center();
 const material = new THREE.MeshStandardMaterial({
   color: 0xff4d6d,
   emissive: 0xff0000,
-  emissiveIntensity: 1 });
+  emissiveIntensity: 1
+});
+
+material.wireframe = true;
 
 const heart = new THREE.Mesh(geometry, material);
 
-heart.scale.set(1.5, 1.5, 1.5);
+heart.scale.set(0.5, 0.5, 0.5);
 heart.position.set(0, 0, 0);
 
 scene.add(heart);
