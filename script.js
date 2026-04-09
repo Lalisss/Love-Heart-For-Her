@@ -12,19 +12,21 @@ document.body.appendChild(renderer.domElement);
 // 💖 สร้างรูปหัวใจ
 const heartShape = new THREE.Shape();
 
-heartShape.moveTo(0, 0);
-heartShape.bezierCurveTo(0, 0, 0, 3, 2, 3);
-heartShape.bezierCurveTo(4, 3, 4, 0, 4, 0);
-heartShape.bezierCurveTo(4, -2, 2, -3, 0, -1);
-heartShape.bezierCurveTo(-2, -3, -4, -2, -4, 0);
-heartShape.bezierCurveTo(-4, 0, -4, 3, -2, 3);
-heartShape.bezierCurveTo(0, 3, 0, 0, 0, 0);
+const x = 0, y = 0;
+
+heartShape.moveTo(x, y + 5);
+heartShape.bezierCurveTo(x, y + 5, x - 5, y + 5, x - 5, y);
+heartShape.bezierCurveTo(x - 5, y - 3, x - 3, y - 7, x, y - 5);
+heartShape.bezierCurveTo(x + 3, y - 7, x + 5, y - 3, x + 5, y);
+heartShape.bezierCurveTo(x + 5, y + 5, x, y + 5, x, y + 5);
 
 const geometry = new THREE.ExtrudeGeometry(heartShape, {
-  depth: 1,
+  depth: 2,
   bevelEnabled: true,
-  bevelSize: 0.3,
-  bevelThickness: 0.3
+  bevelSegments: 2,
+  steps: 2,
+  bevelSize: 0.5,
+  bevelThickness: 0.5
 });
 
 geometry.center();
@@ -35,11 +37,11 @@ const material = new THREE.MeshStandardMaterial({
   emissiveIntensity: 1
 });
 
-material.wireframe = true;
+material.wireframe = false;
 
 const heart = new THREE.Mesh(geometry, material);
 
-heart.scale.set(0.5, 0.5, 0.5);
+heart.scale.set(0.4, 0.4, 0.4);
 heart.position.set(0, 0, 0);
 
 scene.add(heart);
