@@ -21,21 +21,34 @@ heartShape.bezierCurveTo(x - 5, y - 3, x - 3, y - 7, x, y - 5);
 heartShape.bezierCurveTo(x + 3, y - 7, x + 5, y - 3, x + 5, y);
 heartShape.bezierCurveTo(x + 5, y + 5, x, y + 5, x, y + 5);
 
-const geometry = new THREE.ExtrudeGeometry(heartShape, {
-  depth: 2,
-  bevelEnabled: true,
-  bevelSegments: 2,
-  steps: 2,
-  bevelSize: 0.5,
-  bevelThickness: 0.5
-});
+// 💖 NEW: หัวใจแบบเส้น
+const geometry = new THREE.SphereGeometry(2, 64, 64);
+const position = geometry.attributes.position;
 
+for (let i = 0; i < position.count; i++) {
+  let x = position.getX(i);
+  let y = position.getY(i);
+  let z = position.getZ(i);
+
+  const scale = 0.15;
+
+  const newX = scale * 16 * Math.pow(x, 3);
+  const newY = scale * (
+    13 * y -
+    5 * Math.pow(y, 2) -
+    2 * Math.pow(y, 3)
+  );
+  const newZ = z * 0.5;
+
+  position.setXYZ(i, newX, newY, newZ);
+}
+
+geometry.computeVertexNormals();
 geometry.center();
 
-const material = new THREE.MeshStandardMaterial({
-  color: 0xff4d6d,
-  emissive: 0xff0000,
-  emissiveIntensity: 1
+const material = new THREE.MeshBasicMaterial({
+  color: 0xff69b4,
+  wireframe: true
 });
 
 const heart = new THREE.Mesh(geometry, material);
@@ -81,8 +94,8 @@ function animate() {
   heart.rotation.y += 0.01;
   heart.rotation.x += 0.005;
 
-    const scale = 1.5 + Math.sin(Date.now() * 0.005) * 0.15;
-  heart.scale.set(scale, scale, scale);
+const scaleBeat = 1 + Math.sin(Date.now() * 0.005) * 0.1;
+heart.scale.set(scaleBeat, scaleBeat, scaleBeat);
 
   particleSystem.rotation.y += 0.002;
 
