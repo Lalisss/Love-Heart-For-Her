@@ -72,6 +72,8 @@ function animate() {
 
   heart.rotation.y += 0.01;
   heart.rotation.x += 0.005;
+  const beat = 1 + Math.sin(Date.now() * 0.005) * 0.1;
+heart.scale.set(beat, beat, beat);
 
   particleSystem.rotation.y += 0.002;
 
