@@ -16,34 +16,34 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x000000);
 document.body.appendChild(renderer.domElement);
 
-// 💖 HEART SHAPE
-const heartShape = new THREE.Shape();
+// 💖 HEART (เส้นล้วน)
+const geometry = new THREE.BufferGeometry();
+const vertices = [];
 
-heartShape.moveTo(0, 0);
-heartShape.bezierCurveTo(0, 0, -1, -1, -2, 0);
-heartShape.bezierCurveTo(-3, 2, 0, 3, 0, 4);
-heartShape.bezierCurveTo(0, 3, 3, 2, 2, 0);
-heartShape.bezierCurveTo(1, -1, 0, 0, 0, 0);
+for (let t = 0; t < Math.PI * 2; t += 0.02) {
+  const x = 16 * Math.pow(Math.sin(t), 3);
+  const y =
+    13 * Math.cos(t) -
+    5 * Math.cos(2 * t) -
+    2 * Math.cos(3 * t) -
+    Math.cos(4 * t);
 
-// 💖 GEOMETRY
-const geometry = new THREE.ExtrudeGeometry(heartShape, {
-  depth: 0.5,
-  bevelEnabled: true,
-  bevelThickness: 0.2,
-  bevelSize: 0.2,
-  bevelSegments: 3
-});
+  vertices.push(x * 0.2, y * 0.2, 0);
+}
 
-// 💖 MATERIAL (Glow นิด ๆ)
-// 💖 EDGE (เส้นจริง)
-const edges = new THREE.EdgesGeometry(geometry);
+geometry.setAttribute(
+  "position",
+  new THREE.Float32BufferAttribute(vertices, 3)
+);
 
-const line = new THREE.LineSegments(
-  edges,
+geometry.center(); // ✅ ต้องมาก่อน
+
+const line = new THREE.LineLoop(
+  geometry,
   new THREE.LineBasicMaterial({ color: 0xff69b4 })
 );
 
-line.scale.set(1.5, 1.5, 1.5);
+line.scale.set(2, 2, 2);
 
 scene.add(line);
 
@@ -81,17 +81,16 @@ scene.add(particleSystem);
 function animate() {
   requestAnimationFrame(animate);
 
-  line.rotation.y += 0.01;
-  line.rotation.x += 0.005;
+  line.rotation.z += 0.01;
 
-  const scale = 1.5 + Math.sin(Date.now() * 0.005) * 0.15;
-  line.scale.set(scale, scale, scale);
+  // 💓 เต้น
+  const beat = 1 + Math.sin(Date.now() * 0.005) * 0.1;
+  line.scale.set(2 * beat, 2 * beat, 2 * beat);
 
   particleSystem.rotation.y += 0.002;
 
   renderer.render(scene, camera);
 }
-
 animate();
 
 // 📱 RESPONSIVE
