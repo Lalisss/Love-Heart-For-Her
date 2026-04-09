@@ -8,7 +8,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.z = 20;
+camera.position.z = 10; // ปรับให้พอดีเห็นหัวใจ
 
 // 🖥️ RENDERER
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -16,23 +16,17 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x000000);
 document.body.appendChild(renderer.domElement);
 
-// 💖 HEART GEOMETRY (3D จริง)
+// 💖 HEART GEOMETRY 3D (ตาข่ายจริง)
 const geometry = new THREE.ParametricGeometry((u, v, target) => {
-
   const t = u * Math.PI * 2;
   const p = v * Math.PI;
 
   const x = 16 * Math.pow(Math.sin(p), 3) * Math.sin(t);
-  const y =
-    13 * Math.cos(p) -
-    5 * Math.cos(2 * p) -
-    2 * Math.cos(3 * p) -
-    Math.cos(4 * p);
+  const y = 13 * Math.cos(p) - 5 * Math.cos(2 * p) - 2 * Math.cos(3 * p) - Math.cos(4 * p);
   const z = 16 * Math.pow(Math.sin(p), 3) * Math.cos(t);
 
   target.set(x * 0.05, y * 0.05, z * 0.05);
-
-}, 40, 40); // 🔥 ต้องละเอียด
+}, 50, 50); // ละเอียดสูงเพื่อให้ตาข่ายเนียน
 
 // 💖 MATERIAL (ตาข่ายจริง)
 const material = new THREE.MeshBasicMaterial({
@@ -40,52 +34,29 @@ const material = new THREE.MeshBasicMaterial({
   wireframe: true
 });
 
-// 💖 HEART
+// 💖 HEART MESH
 const heart = new THREE.Mesh(geometry, material);
 heart.scale.set(3, 3, 3);
 scene.add(heart);
 
-// ✨ GLOW (ซ้อนอีกชั้น)
+// 💖 GLOW (ซ้อนอีกชั้น, ตาข่ายจริง)
 const glowMaterial = new THREE.MeshBasicMaterial({
   color: 0xff99cc,
   wireframe: true,
   transparent: true,
   opacity: 0.2
 });
-
 const glow = new THREE.Mesh(geometry, glowMaterial);
 glow.scale.set(3.2, 3.2, 3.2);
 scene.add(glow);
 
-// 💡 LIGHT
+// 💡 LIGHT (เผื่ออนาคตใช้ shading)
 const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
 scene.add(ambientLight);
 
 const pointLight = new THREE.PointLight(0xffffff, 2);
 pointLight.position.set(5, 5, 5);
 scene.add(pointLight);
-
-// ✨ PARTICLES
-const particles = new THREE.BufferGeometry();
-const count = 500;
-const positions = new Float32Array(count * 3);
-
-for (let i = 0; i < count * 3; i++) {
-  positions[i] = (Math.random() - 0.5) * 10;
-}
-
-particles.setAttribute(
-  "position",
-  new THREE.BufferAttribute(positions, 3)
-);
-
-const pMaterial = new THREE.PointsMaterial({
-  color: 0xff99cc,
-  size: 0.05
-});
-
-const particleSystem = new THREE.Points(particles, pMaterial);
-scene.add(particleSystem);
 
 // 🎬 ANIMATION
 function animate() {
@@ -97,11 +68,8 @@ function animate() {
   glow.rotation.x += 0.005;
 
   const beat = 1 + Math.sin(Date.now() * 0.005) * 0.1;
-
   heart.scale.set(3 * beat, 3 * beat, 3 * beat);
   glow.scale.set(3.2 * beat, 3.2 * beat, 3.2 * beat);
-
-  particleSystem.rotation.y += 0.002;
 
   renderer.render(scene, camera);
 }
