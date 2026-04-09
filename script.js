@@ -9,53 +9,38 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// 💖 สร้างรูปหัวใจ
-const heartShape = new THREE.Shape();
-
-const x = 0, y = 0;
-
-heartShape.moveTo(x, y + 5);
-
-heartShape.bezierCurveTo(x, y + 5, x - 5, y + 5, x - 5, y);
-heartShape.bezierCurveTo(x - 5, y - 3, x - 3, y - 7, x, y - 5);
-heartShape.bezierCurveTo(x + 3, y - 7, x + 5, y - 3, x + 5, y);
-heartShape.bezierCurveTo(x + 5, y + 5, x, y + 5, x, y + 5);
-
 // 💖 NEW: หัวใจแบบเส้น
-const geometry = new THREE.SphereGeometry(2, 64, 64);
-const position = geometry.attributes.position;
+const geometry = new THREE.BufferGeometry();
+const vertices = [];
 
-for (let i = 0; i < position.count; i++) {
-  let x = position.getX(i);
-  let y = position.getY(i);
-  let z = position.getZ(i);
+for (let t = 0; t < Math.PI * 2; t += 0.05) {
+  for (let p = 0; p < Math.PI; p += 0.05) {
 
-  const scale = 0.15;
+    const x = 16 * Math.pow(Math.sin(p), 3) * Math.sin(t);
+    const y =
+      13 * Math.cos(p) -
+      5 * Math.cos(2 * p) -
+      2 * Math.cos(3 * p) -
+      Math.cos(4 * p);
+    const z = 16 * Math.pow(Math.sin(p), 3) * Math.cos(t);
 
-  const newX = scale * 16 * Math.pow(x, 3);
-  const newY = scale * (
-    13 * y -
-    5 * Math.pow(y, 2) -
-    2 * Math.pow(y, 3)
-  );
-  const newZ = z * 0.5;
-
-  position.setXYZ(i, newX, newY, newZ);
+    vertices.push(x * 0.05, y * 0.05, z * 0.05);
+  }
 }
 
-geometry.computeVertexNormals();
+geometry.setAttribute(
+  "position",
+  new THREE.Float32BufferAttribute(vertices, 3)
+);
+
 geometry.center();
 
-const material = new THREE.MeshBasicMaterial({
-  color: 0xff69b4,
-  wireframe: true
+const material = new THREE.PointsMaterial({
+  color: 0xff4d6d,
+  size: 0.025
 });
 
-const heart = new THREE.Mesh(geometry, material);
-
-heart.scale.set(0.4, 0.4, 0.4);
-heart.position.set(0, 0, 0);
-
+const heart = new THREE.Points(geometry, material);
 scene.add(heart);
 
 camera.position.z = 10;
