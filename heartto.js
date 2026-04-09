@@ -99,3 +99,9 @@ setInterval(() => {
   }, 1000);
 
 }, 3500);
+
+document.addEventListener('click', () => {
+  const audio = document.getElementById("bgm");
+  audio.muted = false;
+  audio.play();
+});
