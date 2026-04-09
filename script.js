@@ -177,6 +177,7 @@ document.addEventListener("click", () => {
   const audio = document.getElementById("bgm");
 
   if (audio && audio.paused) {
+    audio.volume = 0.2; // 🔥 ลดเสียง (0.0 - 1.0)
     audio.play().catch(e => console.log(e));
   }
 });
