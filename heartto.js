@@ -23,6 +23,8 @@ const geometry = new THREE.ExtrudeGeometry(heartShape, {
   bevelEnabled: true
 });
 
+geometry.center();
+
 const material = new THREE.MeshStandardMaterial({
   color: 0xff4d6d,
   emissive: 0xff0000,
