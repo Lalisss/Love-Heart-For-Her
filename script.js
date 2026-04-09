@@ -35,15 +35,17 @@ const geometry = new THREE.ExtrudeGeometry(heartShape, {
 });
 
 // 💖 MATERIAL (Glow นิด ๆ)
-const material = new THREE.MeshBasicMaterial({
-  color: 0xff69b4,
-  wireframe: true
-});
+// 💖 EDGE (เส้นจริง)
+const edges = new THREE.EdgesGeometry(geometry);
 
-// 💖 MESH
-const heart = new THREE.Mesh(geometry, material);
-heart.scale.set(1.5, 1.5, 1.5);
-scene.add(heart);
+const line = new THREE.LineSegments(
+  edges,
+  new THREE.LineBasicMaterial({ color: 0xff69b4 })
+);
+
+line.scale.set(1.5, 1.5, 1.5);
+
+scene.add(line);
 
 // 💡 LIGHT
 const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
@@ -79,19 +81,17 @@ scene.add(particleSystem);
 function animate() {
   requestAnimationFrame(animate);
 
-  // 💖 หมุน
-  heart.rotation.y += 0.01;
-  heart.rotation.x += 0.005;
+  line.rotation.y += 0.01;
+  line.rotation.x += 0.005;
 
-  // 💓 เต้น
   const scale = 1.5 + Math.sin(Date.now() * 0.005) * 0.15;
-  heart.scale.set(scale, scale, scale);
+  line.scale.set(scale, scale, scale);
 
-  // ✨ particle หมุน
   particleSystem.rotation.y += 0.002;
 
   renderer.render(scene, camera);
 }
+
 animate();
 
 // 📱 RESPONSIVE
