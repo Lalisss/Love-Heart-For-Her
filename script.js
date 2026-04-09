@@ -175,8 +175,8 @@ if (textEl) {
 // 🔊 AUDIO
 document.addEventListener("click", () => {
   const audio = document.getElementById("bgm");
-  if (audio) {
-    audio.muted = false;
-    audio.play();
+
+  if (audio && audio.paused) {
+    audio.play().catch(e => console.log(e));
   }
 });
