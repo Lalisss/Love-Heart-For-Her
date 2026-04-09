@@ -30,7 +30,15 @@ const material = new THREE.MeshStandardMaterial({
 
 const heart = new THREE.Mesh(geometry, material);
 
+heart.scale.set(1.5, 1.5, 1.5);
+heart.position.set(0, 0, 0);
+
 scene.add(heart);
+
+camera.position.z = 10;
+
+const light2 = new THREE.AmbientLight(0xffffff, 1.5);
+scene.add(light2);
 
 const light = new THREE.PointLight(0xffffff, 2);
 light.position.set(5, 5, 5);
@@ -71,11 +79,11 @@ function animate() {
 animate(); // 👈 เรียกใช้งานก่อน
 
 const messages = [
-  "This is for you ❤️",
-  "You make me so happy 😊",
-  "I love you more everyday 💖",
-  "Stay with me forever 💫",
-  "You are my everything 🌍"
+  "This is for you babe ❤️",
+  "You make me so happy",
+  "I love you more everyday",
+  "Stay with me forever",
+  "You are my everything"
 ];
 
 let index = 0;
