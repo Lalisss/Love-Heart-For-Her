@@ -71,6 +71,9 @@ function animate() {
   heart.rotation.y += 0.01;
   heart.rotation.x += 0.005;
 
+    const scale = 1.5 + Math.sin(Date.now() * 0.005) * 0.15;
+  heart.scale.set(scale, scale, scale);
+
   particleSystem.rotation.y += 0.002;
 
   renderer.render(scene, camera);
@@ -89,19 +92,23 @@ const messages = [
 let index = 0;
 const textEl = document.getElementById("loveText");
 
-setInterval(() => {
-  textEl.style.opacity = 0;
+if (textEl) {
+  setInterval(() => {
+    textEl.style.opacity = 0;
 
-  setTimeout(() => {
-    index = (index + 1) % messages.length;
-    textEl.innerText = messages[index];
-    textEl.style.opacity = 1;
-  }, 1000);
+    setTimeout(() => {
+      index = (index + 1) % messages.length;
+      textEl.innerText = messages[index];
+      textEl.style.opacity = 1;
+    }, 1000);
 
-}, 3500);
+  }, 3500);
+}
 
 document.addEventListener('click', () => {
   const audio = document.getElementById("bgm");
-  audio.muted = false;
-  audio.play();
+  if (audio) {
+    audio.muted = false;
+    audio.play();
+  }
 });
