@@ -8,7 +8,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.z = 10;
+camera.position.z = 20;
 
 // 🖥️ RENDERER
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -16,33 +16,45 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x000000);
 document.body.appendChild(renderer.domElement);
 
-// 💖 HEART PARAMETRIC 3D
-// 💖 HEART PARAMETRIC 3D
-const geometry = new THREE.ParametricGeometry((u, v, target) => {
+const geometry = new THREE.BufferGeometry();
+const vertices = [];
 
-  const t = u * Math.PI * 2;
-  const p = v * Math.PI;
+for (let t = 0; t < Math.PI * 2; t += 0.02) {
 
-  const x = 16 * Math.pow(Math.sin(p), 3) * Math.sin(t);
+  const x = 16 * Math.pow(Math.sin(t), 3);
   const y =
-    13 * Math.cos(p) -
-    5 * Math.cos(2 * p) -
-    2 * Math.cos(3 * p) -
-    Math.cos(4 * p);
-  const z = 16 * Math.pow(Math.sin(p), 3) * Math.cos(t);
+    13 * Math.cos(t) -
+    5 * Math.cos(2 * t) -
+    2 * Math.cos(3 * t) -
+    Math.cos(4 * t);
 
-  target.set(x * 0.05, y * 0.05, z * 0.05);
+  vertices.push(x * 0.15, y * 0.15, 0);
+}
 
-}, 40, 40);
+geometry.setAttribute(
+  "position",
+  new THREE.Float32BufferAttribute(vertices, 3)
+);
 
-// 💖 material
-const material = new THREE.MeshBasicMaterial({
-  color: 0xff69b4,
-  wireframe: true
+const glowMaterial = new THREE.PointsMaterial({
+  color: 0xff99cc,
+  size: 0.05,
+  transparent: true,
+  opacity: 0.3
 });
 
-// 💖 mesh
-const heart = new THREE.Mesh(geometry, material);
+const glow = new THREE.Points(geometry, glowMaterial);
+glow.scale.set(3.2, 3.2, 3.2);
+scene.add(glow);
+
+// 💖 heart (ตัวหลัก)
+const heartMaterial = new THREE.PointsMaterial({
+  color: 0xff69b4,
+  size: 0.03
+});
+
+const heart = new THREE.Points(geometry, heartMaterial);
+heart.scale.set(3, 3, 3);
 scene.add(heart);
 
 // 💡 LIGHT
@@ -78,11 +90,12 @@ scene.add(particleSystem);
 function animate() {
   requestAnimationFrame(animate);
 
-  heart.rotation.y += 0.01;
-  heart.rotation.x += 0.005;
+  heart.rotation.z += 0.01;
 
   const beat = 1 + Math.sin(Date.now() * 0.005) * 0.1;
-  heart.scale.set(beat, beat, beat);
+
+  heart.scale.set(3 * beat, 3 * beat, 3 * beat);
+  glow.scale.set(3.2 * beat, 3.2 * beat, 3.2 * beat);
 
   particleSystem.rotation.y += 0.002;
 
