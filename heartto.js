@@ -23,10 +23,16 @@ const geometry = new THREE.ExtrudeGeometry(heartShape, {
   bevelEnabled: true
 });
 
-const material = new THREE.MeshBasicMaterial({ color: 0xff4d6d });
-const heart = new THREE.Mesh(geometry, material);
+const material = new THREE.MeshStandardMaterial({
+  color: 0xff4d6d,
+  emissive: 0xff0000,
+  emissiveIntensity: 1 });
 
 scene.add(heart);
+
+const light = new THREE.PointLight(0xffffff, 2);
+light.position.set(5, 5, 5);
+scene.add(light);
 
 // ✨ particle รอบๆ
 const particles = new THREE.BufferGeometry();
