@@ -16,36 +16,34 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x000000);
 document.body.appendChild(renderer.domElement);
 
-// 💖 HEART (เส้นล้วน)
-const geometry = new THREE.BufferGeometry();
-const vertices = [];
+// 💖 HEART PARAMETRIC 3D
+// 💖 HEART PARAMETRIC 3D
+const geometry = new THREE.ParametricGeometry((u, v, target) => {
 
-for (let t = 0; t < Math.PI * 2; t += 0.02) {
-  const x = 16 * Math.pow(Math.sin(t), 3);
+  const t = u * Math.PI * 2;
+  const p = v * Math.PI;
+
+  const x = 16 * Math.pow(Math.sin(p), 3) * Math.sin(t);
   const y =
-    13 * Math.cos(t) -
-    5 * Math.cos(2 * t) -
-    2 * Math.cos(3 * t) -
-    Math.cos(4 * t);
+    13 * Math.cos(p) -
+    5 * Math.cos(2 * p) -
+    2 * Math.cos(3 * p) -
+    Math.cos(4 * p);
+  const z = 16 * Math.pow(Math.sin(p), 3) * Math.cos(t);
 
-  vertices.push(x * 0.2, y * 0.2, 0);
-}
+  target.set(x * 0.05, y * 0.05, z * 0.05);
 
-geometry.setAttribute(
-  "position",
-  new THREE.Float32BufferAttribute(vertices, 3)
-);
+}, 40, 40);
 
-geometry.center(); // ✅ ต้องมาก่อน
+// 💖 material
+const material = new THREE.MeshBasicMaterial({
+  color: 0xff69b4,
+  wireframe: true
+});
 
-const line = new THREE.LineLoop(
-  geometry,
-  new THREE.LineBasicMaterial({ color: 0xff69b4 })
-);
-
-line.scale.set(2, 2, 2);
-
-scene.add(line);
+// 💖 mesh
+const heart = new THREE.Mesh(geometry, material);
+scene.add(heart);
 
 // 💡 LIGHT
 const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
@@ -68,7 +66,6 @@ particles.setAttribute(
   "position",
   new THREE.BufferAttribute(positions, 3)
 );
-
 const pMaterial = new THREE.PointsMaterial({
   color: 0xff99cc,
   size: 0.05
@@ -81,11 +78,11 @@ scene.add(particleSystem);
 function animate() {
   requestAnimationFrame(animate);
 
-  line.rotation.z += 0.01;
+  heart.rotation.y += 0.01;
+  heart.rotation.x += 0.005;
 
-  // 💓 เต้น
   const beat = 1 + Math.sin(Date.now() * 0.005) * 0.1;
-  line.scale.set(2 * beat, 2 * beat, 2 * beat);
+  heart.scale.set(beat, beat, beat);
 
   particleSystem.rotation.y += 0.002;
 
