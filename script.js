@@ -1,15 +1,22 @@
+// 🎬 SCENE
 const scene = new THREE.Scene();
 
+// 🎥 CAMERA
 const camera = new THREE.PerspectiveCamera(
-  75, window.innerWidth / window.innerHeight, 0.1, 1000
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
 );
-camera.position.z = 12;
+camera.position.z = 10;
 
-const renderer = new THREE.WebGLRenderer();
+// 🖥️ RENDERER
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000);
 document.body.appendChild(renderer.domElement);
 
-// 💖 สร้างรูปหัวใจ
+// 💖 HEART SHAPE
 const heartShape = new THREE.Shape();
 
 heartShape.moveTo(0, 0);
@@ -18,74 +25,84 @@ heartShape.bezierCurveTo(-3, 2, 0, 3, 0, 4);
 heartShape.bezierCurveTo(0, 3, 3, 2, 2, 0);
 heartShape.bezierCurveTo(1, -1, 0, 0, 0, 0);
 
-// 💖 HEART (ขึ้นชัวร์)
-const geometry = new THREE.BufferGeometry();
-const vertices = [];
-
-for (let t = 0; t < Math.PI * 2; t += 0.02) {
-
-  const x = 16 * Math.pow(Math.sin(t), 3);
-  const y =
-    13 * Math.cos(t) -
-    5 * Math.cos(2 * t) -
-    2 * Math.cos(3 * t) -
-    Math.cos(4 * t);
-
-  vertices.push(x * 0.3, y * 0.3, 0); // 👈 ขยายให้ใหญ่ขึ้น
-}
-
-geometry.setAttribute(
-  "position",
-  new THREE.Float32BufferAttribute(vertices, 3)
-);
-
-geometry.center();
-
-const material = new THREE.LineBasicMaterial({
-  color: 0xff69b4
+// 💖 GEOMETRY
+const geometry = new THREE.ExtrudeGeometry(heartShape, {
+  depth: 0.5,
+  bevelEnabled: true,
+  bevelThickness: 0.2,
+  bevelSize: 0.2,
+  bevelSegments: 3
 });
 
-const heart = new THREE.LineLoop(geometry, material);
+// 💖 MATERIAL (Glow นิด ๆ)
+const material = new THREE.MeshStandardMaterial({
+  color: 0xff4d6d,
+  emissive: 0xff1a4d,
+  emissiveIntensity: 0.8
+});
 
-heart.scale.set(3, 3, 3);
-
+// 💖 MESH
+const heart = new THREE.Mesh(geometry, material);
+heart.scale.set(1.5, 1.5, 1.5);
 scene.add(heart);
 
-// ✨ particle รอบๆ
+// 💡 LIGHT
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+scene.add(ambientLight);
+
+const pointLight = new THREE.PointLight(0xffffff, 2);
+pointLight.position.set(5, 5, 5);
+scene.add(pointLight);
+
+// ✨ PARTICLES
 const particles = new THREE.BufferGeometry();
 const count = 500;
-
 const positions = new Float32Array(count * 3);
+
+for (let i = 0; i < count * 3; i++) {
+  positions[i] = (Math.random() - 0.5) * 10;
+}
+
+particles.setAttribute(
+  "position",
+  new THREE.BufferAttribute(positions, 3)
+);
 
 const pMaterial = new THREE.PointsMaterial({
   color: 0xff99cc,
   size: 0.05
 });
 
-for (let i = 0; i < count * 3; i++) {
-  positions[i] = (Math.random() - 0.5) * 10;
-}
-
-particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
 const particleSystem = new THREE.Points(particles, pMaterial);
 scene.add(particleSystem);
 
-// 🎬 animation
+// 🎬 ANIMATION
 function animate() {
   requestAnimationFrame(animate);
 
-  // 👇 หมุนแบบไม่หาย
-  heart.rotation.z += 0.01;
+  // 💖 หมุน
+  heart.rotation.y += 0.01;
+  heart.rotation.x += 0.005;
 
-  const beat = 1 + Math.sin(Date.now() * 0.005) * 0.1;
-  heart.scale.set(3 * beat, 3 * beat, 3 * beat);
+  // 💓 เต้น
+  const scale = 1.5 + Math.sin(Date.now() * 0.005) * 0.15;
+  heart.scale.set(scale, scale, scale);
+
+  // ✨ particle หมุน
+  particleSystem.rotation.y += 0.002;
 
   renderer.render(scene, camera);
 }
-
 animate();
 
+// 📱 RESPONSIVE
+window.addEventListener("resize", () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// 💬 TEXT
 const messages = [
   "This is for you babe ",
   "You make me so happy",
@@ -130,11 +147,11 @@ if (textEl) {
       textEl.innerText = messages[index];
       textEl.style.opacity = 1;
     }, 1000);
-
   }, 3500);
 }
 
-document.addEventListener('click', () => {
+// 🔊 AUDIO
+document.addEventListener("click", () => {
   const audio = document.getElementById("bgm");
   if (audio) {
     audio.muted = false;
