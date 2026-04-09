@@ -24,7 +24,7 @@ for (let t = 0; t < Math.PI * 2; t += 0.05) {
       Math.cos(4 * p);
     const z = 16 * Math.pow(Math.sin(p), 3) * Math.cos(t);
 
-    vertices.push(x * 0.05, y * 0.05, z * 0.05);
+    vertices.push(x * 0.1, y * 0.1, z * 0.1);
   }
 }
 
@@ -43,7 +43,7 @@ const material = new THREE.PointsMaterial({
 const heart = new THREE.Points(geometry, material);
 scene.add(heart);
 
-camera.position.z = 10;
+camera.position.z = 6;
 
 const light2 = new THREE.AmbientLight(0xffffff, 1.5);
 scene.add(light2);
@@ -79,7 +79,7 @@ function animate() {
   heart.rotation.y += 0.01;
   heart.rotation.x += 0.005;
 
-const beat = 1 + Math.sin(Date.now() * 0.005) * 0.08;
+const beat = 2 + Math.sin(Date.now() * 0.004) * 0.12;
 heart.scale.set(beat, beat, beat);
 
   particleSystem.rotation.y += 0.002;
