@@ -19,29 +19,36 @@ heartShape.bezierCurveTo(0, 3, 3, 2, 2, 0);
 heartShape.bezierCurveTo(1, -1, 0, 0, 0, 0);
 
 // 💖 geometry (หัวใจเส้น 3D)
-const geometry = new THREE.SphereGeometry(2, 64, 64);
+const geometry = new THREE.BufferGeometry();
+const vertices = [];
 
-const pos = geometry.attributes.position;
+// ❗ ใช้ loop เดียวพอ
+for (let t = 0; t < Math.PI * 2; t += 0.01) {
 
-for (let i = 0; i < pos.count; i++) {
-  let x = pos.getX(i);
-  let y = pos.getY(i);
-  let z = pos.getZ(i);
+  const x = 16 * Math.pow(Math.sin(t), 3);
+  const y =
+    13 * Math.cos(t) -
+    5 * Math.cos(2 * t) -
+    2 * Math.cos(3 * t) -
+    Math.cos(4 * t);
 
-  const newX = x * Math.sqrt(1 - (y * 0.5));
-  const newY = y;
-  const newZ = z * Math.sqrt(1 - (y * 0.5));
+  const z = 0;
 
-  pos.setXYZ(i, newX, newY, newZ);
+  vertices.push(x * 0.2, y * 0.2, z);
 }
 
-geometry.computeVertexNormals();
-const material = new THREE.MeshBasicMaterial({
-  color: 0xff69b4,
-  wireframe: true
-});
-const heart = new THREE.Mesh(geometry, material);
+geometry.setAttribute(
+  "position",
+  new THREE.Float32BufferAttribute(vertices, 3)
+);
 
+geometry.center();
+
+const material = new THREE.LineBasicMaterial({
+  color: 0xff69b4
+});
+
+const heart = new THREE.LineLoop(geometry, material);
 scene.add(heart);
 
 // ✨ particle รอบๆ
@@ -55,11 +62,6 @@ for (let i = 0; i < count * 3; i++) {
 }
 
 particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-const pMaterial = new THREE.PointsMaterial({
-  color: 0xff99cc,
-  size: 0.05
-});
 
 const particleSystem = new THREE.Points(particles, pMaterial);
 scene.add(particleSystem);
