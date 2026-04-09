@@ -70,15 +70,22 @@ particles.setAttribute(
   new THREE.BufferAttribute(positions, 3)
 );
 
+// 🔥 เพิ่ม texture ก่อน
+const texture = new THREE.TextureLoader().load(
+  "https://threejs.org/examples/textures/sprites/disc.png"
+);
+
+// 🔥 แทนที่ pMaterial เดิม
 const pMaterial = new THREE.PointsMaterial({
+  map: texture,
   color: 0xff99cc,
-  size: 0.12,
+  size: 0.15,
   transparent: true,
   opacity: 1,
-  depthWrite: false,   // 🔥 สำคัญมาก
-  blending: THREE.AdditiveBlending // 🔥 ทำให้มันเรือง
+  depthWrite: false,
+  blending: THREE.AdditiveBlending
+  alphaTest: 0.01
 });
-
 const particleSystem = new THREE.Points(particles, pMaterial);
 scene.add(particleSystem);
 
