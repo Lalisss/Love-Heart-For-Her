@@ -3,7 +3,7 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75, window.innerWidth / window.innerHeight, 0.1, 1000
 );
-camera.position.z = 5;
+camera.position.z = 4;
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -24,7 +24,7 @@ for (let t = 0; t < Math.PI * 2; t += 0.05) {
       Math.cos(4 * p);
     const z = 16 * Math.pow(Math.sin(p), 3) * Math.cos(t);
 
-    vertices.push(x * 0.1, y * 0.1, z * 0.1);
+  vertices.push(x * 0.2, y * 0.2, z * 0.2);
   }
 }
 
@@ -80,7 +80,7 @@ function animate() {
   heart.rotation.x += 0.005;
 
 const beat = 2 + Math.sin(Date.now() * 0.004) * 0.12;
-heart.scale.set(beat, beat, beat);
+heart.scale.set(2, 2, 2);
 
   particleSystem.rotation.y += 0.002;
 
