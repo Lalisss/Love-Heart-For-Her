@@ -35,10 +35,9 @@ const geometry = new THREE.ExtrudeGeometry(heartShape, {
 });
 
 // 💖 MATERIAL (Glow นิด ๆ)
-const material = new THREE.MeshStandardMaterial({
-  color: 0xff4d6d,
-  emissive: 0xff1a4d,
-  emissiveIntensity: 0.8
+const material = new THREE.MeshBasicMaterial({
+  color: 0xff69b4,
+  wireframe: true
 });
 
 // 💖 MESH
