@@ -76,19 +76,26 @@ const texture = new THREE.TextureLoader().load(
 );
 
 // 🔥 แทนที่ pMaterial เดิม
-const pMaterial = new THREE.PointsMaterial({
-  map: texture,
-  color: 0xff99cc,
-  size: 0.15,
-  transparent: true,
-  opacity: 1,
-  depthWrite: false,
-  blending: THREE.AdditiveBlending, // 🔥 ต้องมี comma
-  alphaTest: 0.01                   // 🔥 ใส่หลัง comma
-});
+const loader = new THREE.TextureLoader();
+loader.load(
+  "https://threejs.org/examples/textures/sprites/disc.png", // URL ของ texture
+  function(texture) {
+    // สร้าง material หลังจากโหลด texture เสร็จ
+    const pMaterial = new THREE.PointsMaterial({
+      map: texture,               // ใช้ texture วงกลม
+      color: 0xff99cc,
+      size: 0.15,
+      transparent: true,
+      opacity: 1,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      alphaTest: 0.01
+    });
 
-const particleSystem = new THREE.Points(particles, pMaterial);
-scene.add(particleSystem);
+    const particleSystem = new THREE.Points(particles, pMaterial);
+    scene.add(particleSystem);
+  }
+);
 
 // 💡 LIGHT (เผื่ออนาคตใช้ shading)
 const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
