@@ -3,50 +3,30 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75, window.innerWidth / window.innerHeight, 0.1, 1000
 );
-camera.position.z = 2;
+camera.position.z = 5;
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// 💖 NEW: หัวใจแบบเส้น
-const geometry = new THREE.BufferGeometry();
-const vertices = [];
+// 💖 สร้างรูปหัวใจ
+const heartShape = new THREE.Shape();
 
-for (let t = 0; t < Math.PI * 2; t += 0.01) {
+heartShape.moveTo(0, 0);
+heartShape.bezierCurveTo(0, 0, -1, -1, -2, 0);
+heartShape.bezierCurveTo(-3, 2, 0, 3, 0, 4);
+heartShape.bezierCurveTo(0, 3, 3, 2, 2, 0);
+heartShape.bezierCurveTo(1, -1, 0, 0, 0, 0);
 
-  const x = 16 * Math.pow(Math.sin(t), 3);
-  const y =
-    13 * Math.cos(t) -
-    5 * Math.cos(2 * t) -
-    2 * Math.cos(3 * t) -
-    Math.cos(4 * t);
-
-  const z = 0;
-
-  vertices.push(x * 0.2, y * 0.2, z);
-}
-
-geometry.setAttribute(
-  "position",
-  new THREE.Float32BufferAttribute(vertices, 3)
-);
-
-geometry.center();
-const material = new THREE.LineBasicMaterial({
-  color: 0xff4d6d
+const geometry = new THREE.ExtrudeGeometry(heartShape, {
+  depth: 0.5,
+  bevelEnabled: true
 });
 
-const heart = new THREE.LineLoop(geometry, material);
+const material = new THREE.MeshBasicMaterial({ color: 0xff4d6d });
+const heart = new THREE.Mesh(geometry, material);
+
 scene.add(heart);
-
-
-const light2 = new THREE.AmbientLight(0xffffff, 1.5);
-scene.add(light2);
-
-const light = new THREE.PointLight(0xffffff, 2);
-light.position.set(5, 5, 5);
-scene.add(light);
 
 // ✨ particle รอบๆ
 const particles = new THREE.BufferGeometry();
@@ -75,15 +55,12 @@ function animate() {
   heart.rotation.y += 0.01;
   heart.rotation.x += 0.005;
 
-const beat = 3 + Math.sin(Date.now() * 0.004) * 0.2;
-heart.scale.set(beat, beat, beat);
-
   particleSystem.rotation.y += 0.002;
 
   renderer.render(scene, camera);
 }
 
-animate(); // 👈 เรียกใช้งานก่อน
+animate();
 
 const messages = [
   "This is for you babe ",
