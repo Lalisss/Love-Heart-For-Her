@@ -16,46 +16,46 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x000000);
 document.body.appendChild(renderer.domElement);
 
-const geometry = new THREE.BufferGeometry();
-const vertices = [];
+// 💖 HEART GEOMETRY (3D จริง)
+const geometry = new THREE.ParametricGeometry((u, v, target) => {
 
-for (let t = 0; t < Math.PI * 2; t += 0.02) {
+  const t = u * Math.PI * 2;
+  const p = v * Math.PI;
 
-  const x = 16 * Math.pow(Math.sin(t), 3);
+  const x = 16 * Math.pow(Math.sin(p), 3) * Math.sin(t);
   const y =
-    13 * Math.cos(t) -
-    5 * Math.cos(2 * t) -
-    2 * Math.cos(3 * t) -
-    Math.cos(4 * t);
+    13 * Math.cos(p) -
+    5 * Math.cos(2 * p) -
+    2 * Math.cos(3 * p) -
+    Math.cos(4 * p);
+  const z = 16 * Math.pow(Math.sin(p), 3) * Math.cos(t);
 
-  vertices.push(x * 0.15, y * 0.15, 0);
-}
+  target.set(x * 0.05, y * 0.05, z * 0.05);
 
-geometry.setAttribute(
-  "position",
-  new THREE.Float32BufferAttribute(vertices, 3)
-);
+}, 40, 40); // 🔥 ต้องละเอียด
 
-const glowMaterial = new THREE.PointsMaterial({
-  color: 0xff99cc,
-  size: 0.05,
-  transparent: true,
-  opacity: 0.3
-});
-
-const glow = new THREE.Points(geometry, glowMaterial);
-glow.scale.set(3.2, 3.2, 3.2);
-scene.add(glow);
-
-// 💖 heart (ตัวหลัก)
-const heartMaterial = new THREE.PointsMaterial({
+// 💖 MATERIAL (ตาข่ายจริง)
+const material = new THREE.MeshBasicMaterial({
   color: 0xff69b4,
-  size: 0.03
+  wireframe: true
 });
 
-const heart = new THREE.Points(geometry, heartMaterial);
+// 💖 HEART
+const heart = new THREE.Mesh(geometry, material);
 heart.scale.set(3, 3, 3);
 scene.add(heart);
+
+// ✨ GLOW (ซ้อนอีกชั้น)
+const glowMaterial = new THREE.MeshBasicMaterial({
+  color: 0xff99cc,
+  wireframe: true,
+  transparent: true,
+  opacity: 0.2
+});
+
+const glow = new THREE.Mesh(geometry, glowMaterial);
+glow.scale.set(3.2, 3.2, 3.2);
+scene.add(glow);
 
 // 💡 LIGHT
 const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
@@ -78,6 +78,7 @@ particles.setAttribute(
   "position",
   new THREE.BufferAttribute(positions, 3)
 );
+
 const pMaterial = new THREE.PointsMaterial({
   color: 0xff99cc,
   size: 0.05
@@ -90,7 +91,10 @@ scene.add(particleSystem);
 function animate() {
   requestAnimationFrame(animate);
 
-  heart.rotation.z += 0.01;
+  heart.rotation.y += 0.01;
+  heart.rotation.x += 0.005;
+  glow.rotation.y += 0.01;
+  glow.rotation.x += 0.005;
 
   const beat = 1 + Math.sin(Date.now() * 0.005) * 0.1;
 
