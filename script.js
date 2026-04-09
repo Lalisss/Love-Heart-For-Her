@@ -8,7 +8,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.z = 10; // ปรับให้พอดีเห็นหัวใจ
+camera.position.z = 8; // ปรับให้พอดีเห็นหัวใจ
 
 // 🖥️ RENDERER
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -49,6 +49,36 @@ const glowMaterial = new THREE.MeshBasicMaterial({
 const glow = new THREE.Mesh(geometry, glowMaterial);
 glow.scale.set(3.2, 3.2, 3.2);
 scene.add(glow);
+// ✨ PARTICLES (ฟุ้งรอบหัวใจ)
+const particles = new THREE.BufferGeometry();
+const count = 800;
+
+const positions = new Float32Array(count * 3);
+const radius = 8;
+
+for (let i = 0; i < count; i++) {
+  const angle = Math.random() * Math.PI * 2;
+  const r = radius + Math.random() * 2;
+
+  positions[i * 3] = Math.cos(angle) * r;
+  positions[i * 3 + 1] = (Math.random() - 0.5) * 5;
+  positions[i * 3 + 2] = Math.sin(angle) * r;
+}
+
+particles.setAttribute(
+  "position",
+  new THREE.BufferAttribute(positions, 3)
+);
+
+const pMaterial = new THREE.PointsMaterial({
+  color: 0xff99cc,
+  size: 0.05,
+  transparent: true,
+  opacity: 0.7
+});
+
+const particleSystem = new THREE.Points(particles, pMaterial);
+scene.add(particleSystem);
 
 // 💡 LIGHT (เผื่ออนาคตใช้ shading)
 const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
@@ -66,6 +96,7 @@ function animate() {
   heart.rotation.x += 0.005;
   glow.rotation.y += 0.01;
   glow.rotation.x += 0.005;
+  particleSystem.rotation.y += 0.002;
 
   const beat = 1 + Math.sin(Date.now() * 0.005) * 0.1;
   heart.scale.set(3 * beat, 3 * beat, 3 * beat);
