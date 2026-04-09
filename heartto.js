@@ -28,6 +28,8 @@ const material = new THREE.MeshStandardMaterial({
   emissive: 0xff0000,
   emissiveIntensity: 1 });
 
+const heart = new THREE.Mesh(geometry, material);
+
 scene.add(heart);
 
 const light = new THREE.PointLight(0xffffff, 2);
@@ -66,4 +68,26 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-animate();
+animate(); // 👈 เรียกใช้งานก่อน
+
+const messages = [
+  "This is for you ❤️",
+  "You make me so happy 😊",
+  "I love you more everyday 💖",
+  "Stay with me forever 💫",
+  "You are my everything 🌍"
+];
+
+let index = 0;
+const textEl = document.getElementById("loveText");
+
+setInterval(() => {
+  textEl.style.opacity = 0;
+
+  setTimeout(() => {
+    index = (index + 1) % messages.length;
+    textEl.innerText = messages[index];
+    textEl.style.opacity = 1;
+  }, 1000);
+
+}, 3500);
