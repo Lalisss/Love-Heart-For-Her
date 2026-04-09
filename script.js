@@ -24,7 +24,7 @@ for (let t = 0; t < Math.PI * 2; t += 0.01) {
 
   const z = 0;
 
-  vertices.push(x * 0.15, y * 0.15, z);
+  vertices.push(x * 0.2, y * 0.2, z);
 }
 
 geometry.setAttribute(
@@ -33,7 +33,6 @@ geometry.setAttribute(
 );
 
 geometry.center();
-
 const material = new THREE.LineBasicMaterial({
   color: 0xff4d6d
 });
