@@ -3,7 +3,7 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75, window.innerWidth / window.innerHeight, 0.1, 1000
 );
-camera.position.z = 4;
+camera.position.z = 2;
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -13,9 +13,9 @@ document.body.appendChild(renderer.domElement);
 const geometry = new THREE.BufferGeometry();
 const vertices = [];
 
-for (let t = 0; t < Math.PI * 2; t += 0.05) {
-  for (let p = 0; p < Math.PI; p += 0.05) {
-
+for (let t = 0; t < Math.PI * 2; t += 0.03) {
+  for (let p = 0; p < Math.PI; p += 0.03) {
+    
     const x = 16 * Math.pow(Math.sin(p), 3) * Math.sin(t);
     const y =
       13 * Math.cos(p) -
@@ -24,7 +24,7 @@ for (let t = 0; t < Math.PI * 2; t += 0.05) {
       Math.cos(4 * p);
     const z = 16 * Math.pow(Math.sin(p), 3) * Math.cos(t);
 
-  vertices.push(x * 0.2, y * 0.2, z * 0.2);
+  vertices.push(x * 0.35, y * 0.35, z * 0.35);
   }
 }
 
@@ -37,13 +37,13 @@ geometry.center();
 
 const material = new THREE.PointsMaterial({
   color: 0xff4d6d,
-  size: 0.025
+  size: 0.05,
+   transparent: true,
+  opacity: 0.9
 });
 
 const heart = new THREE.Points(geometry, material);
 scene.add(heart);
-
-camera.position.z = 6;
 
 const light2 = new THREE.AmbientLight(0xffffff, 1.5);
 scene.add(light2);
@@ -79,8 +79,8 @@ function animate() {
   heart.rotation.y += 0.01;
   heart.rotation.x += 0.005;
 
-const beat = 2 + Math.sin(Date.now() * 0.004) * 0.12;
-heart.scale.set(2, 2, 2);
+const beat = 3 + Math.sin(Date.now() * 0.004) * 0.2;
+heart.scale.set(beat, beat, beat);
 
   particleSystem.rotation.y += 0.002;
 
