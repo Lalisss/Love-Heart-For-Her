@@ -13,19 +13,18 @@ document.body.appendChild(renderer.domElement);
 const geometry = new THREE.BufferGeometry();
 const vertices = [];
 
-for (let t = 0; t < Math.PI * 2; t += 0.03) {
-  for (let p = 0; p < Math.PI; p += 0.03) {
-    
-    const x = 16 * Math.pow(Math.sin(p), 3) * Math.sin(t);
-    const y =
-      13 * Math.cos(p) -
-      5 * Math.cos(2 * p) -
-      2 * Math.cos(3 * p) -
-      Math.cos(4 * p);
-    const z = 16 * Math.pow(Math.sin(p), 3) * Math.cos(t);
+for (let t = 0; t < Math.PI * 2; t += 0.01) {
 
-  vertices.push(x * 0.35, y * 0.35, z * 0.35);
-  }
+  const x = 16 * Math.pow(Math.sin(t), 3);
+  const y =
+    13 * Math.cos(t) -
+    5 * Math.cos(2 * t) -
+    2 * Math.cos(3 * t) -
+    Math.cos(4 * t);
+
+  const z = 0;
+
+  vertices.push(x * 0.15, y * 0.15, z);
 }
 
 geometry.setAttribute(
@@ -35,15 +34,13 @@ geometry.setAttribute(
 
 geometry.center();
 
-const material = new THREE.PointsMaterial({
-  color: 0xff4d6d,
-  size: 0.05,
-   transparent: true,
-  opacity: 0.9
+const material = new THREE.LineBasicMaterial({
+  color: 0xff4d6d
 });
 
-const heart = new THREE.Points(geometry, material);
+const heart = new THREE.LineLoop(geometry, material);
 scene.add(heart);
+
 
 const light2 = new THREE.AmbientLight(0xffffff, 1.5);
 scene.add(light2);
