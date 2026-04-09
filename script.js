@@ -83,9 +83,10 @@ const pMaterial = new THREE.PointsMaterial({
   transparent: true,
   opacity: 1,
   depthWrite: false,
-  blending: THREE.AdditiveBlending
-  alphaTest: 0.01
+  blending: THREE.AdditiveBlending, // 🔥 ต้องมี comma
+  alphaTest: 0.01                   // 🔥 ใส่หลัง comma
 });
+
 const particleSystem = new THREE.Points(particles, pMaterial);
 scene.add(particleSystem);
 
