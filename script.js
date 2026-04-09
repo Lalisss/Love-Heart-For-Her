@@ -3,7 +3,7 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75, window.innerWidth / window.innerHeight, 0.1, 1000
 );
-camera.position.z = 25;
+camera.position.z = 8;
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -19,11 +19,11 @@ heartShape.bezierCurveTo(0, 3, 3, 2, 2, 0);
 heartShape.bezierCurveTo(1, -1, 0, 0, 0, 0);
 
 // 💖 geometry (หัวใจเส้น 3D)
+// 💖 HEART (เส้นชัดแน่นอน)
 const geometry = new THREE.BufferGeometry();
 const vertices = [];
 
-// ❗ ใช้ loop เดียวพอ
-for (let t = 0; t < Math.PI * 2; t += 0.01) {
+for (let t = 0; t < Math.PI * 2; t += 0.02) {
 
   const x = 16 * Math.pow(Math.sin(t), 3);
   const y =
@@ -32,9 +32,7 @@ for (let t = 0; t < Math.PI * 2; t += 0.01) {
     2 * Math.cos(3 * t) -
     Math.cos(4 * t);
 
-  const z = 0;
-
-  vertices.push(x * 0.2, y * 0.2, z);
+  vertices.push(x * 0.2, y * 0.2, 0);
 }
 
 geometry.setAttribute(
@@ -49,6 +47,7 @@ const material = new THREE.LineBasicMaterial({
 });
 
 const heart = new THREE.LineLoop(geometry, material);
+heart.scale.set(2, 2, 2);
 scene.add(heart);
 
 // ✨ particle รอบๆ
@@ -56,6 +55,11 @@ const particles = new THREE.BufferGeometry();
 const count = 500;
 
 const positions = new Float32Array(count * 3);
+
+const pMaterial = new THREE.PointsMaterial({
+  color: 0xff99cc,
+  size: 0.05
+});
 
 for (let i = 0; i < count * 3; i++) {
   positions[i] = (Math.random() - 0.5) * 10;
@@ -71,11 +75,9 @@ function animate() {
   requestAnimationFrame(animate);
 
   heart.rotation.y += 0.01;
-  heart.rotation.x += 0.005;
-  const beat = 1 + Math.sin(Date.now() * 0.005) * 0.1;
-heart.scale.set(beat, beat, beat);
 
-  particleSystem.rotation.y += 0.002;
+  const beat = 1 + Math.sin(Date.now() * 0.005) * 0.1;
+  heart.scale.set(2 * beat, 2 * beat, 2 * beat);
 
   renderer.render(scene, camera);
 }
