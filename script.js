@@ -3,7 +3,7 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75, window.innerWidth / window.innerHeight, 0.1, 1000
 );
-camera.position.z = 5;
+camera.position.z = 10;
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -18,12 +18,28 @@ heartShape.bezierCurveTo(-3, 2, 0, 3, 0, 4);
 heartShape.bezierCurveTo(0, 3, 3, 2, 2, 0);
 heartShape.bezierCurveTo(1, -1, 0, 0, 0, 0);
 
-const geometry = new THREE.ExtrudeGeometry(heartShape, {
-  depth: 0.5,
-  bevelEnabled: true
-});
+// 💖 geometry (หัวใจเส้น 3D)
+const geometry = new THREE.SphereGeometry(2, 64, 64);
 
-const material = new THREE.MeshBasicMaterial({ color: 0xff4d6d });
+const pos = geometry.attributes.position;
+
+for (let i = 0; i < pos.count; i++) {
+  let x = pos.getX(i);
+  let y = pos.getY(i);
+  let z = pos.getZ(i);
+
+  const newX = x * Math.sqrt(1 - (y * 0.5));
+  const newY = y;
+  const newZ = z * Math.sqrt(1 - (y * 0.5));
+
+  pos.setXYZ(i, newX, newY, newZ);
+}
+
+geometry.computeVertexNormals();
+const material = new THREE.MeshBasicMaterial({
+  color: 0xff69b4,
+  wireframe: true
+});
 const heart = new THREE.Mesh(geometry, material);
 
 scene.add(heart);
