@@ -15,6 +15,7 @@ const heartShape = new THREE.Shape();
 const x = 0, y = 0;
 
 heartShape.moveTo(x, y + 5);
+
 heartShape.bezierCurveTo(x, y + 5, x - 5, y + 5, x - 5, y);
 heartShape.bezierCurveTo(x - 5, y - 3, x - 3, y - 7, x, y - 5);
 heartShape.bezierCurveTo(x + 3, y - 7, x + 5, y - 3, x + 5, y);
@@ -36,8 +37,6 @@ const material = new THREE.MeshStandardMaterial({
   emissive: 0xff0000,
   emissiveIntensity: 1
 });
-
-material.wireframe = false;
 
 const heart = new THREE.Mesh(geometry, material);
 
